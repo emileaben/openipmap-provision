@@ -1,0 +1,31 @@
+---
+- hosts: all
+  gather_facts: false
+  sudo: true
+  vars_files:
+   - vars.yml
+  tasks:
+   - name: Add rpm repositories
+     ignore_errors: true
+     command: rpm -Uvh "{{ item }}"
+     with_items: rpm_repos
+     args:
+       creates: "/etc/yum.repos.d/pgdg-92-centos.repo"
+   # ^^--- this should probably use something like: https://www.zigg.com/2013/yum-repository-bootstrapping-ansible.html
+   - name: "Install required system packages."
+     yum: name="{{ item }}" state=latest
+     with_items: system_packages
+   - name: "Install required Python packages."
+     easy_install: name="{{ item }}"
+     with_items: python_packages
+   - name: "Initiate PG database"
+     command: service postgresql-9.2 initdb
+              creates=/var/lib/pgsql/data/postgresql.conf
+   - name: "Create PG openipmap db"
+     postgresql_db: name=openipmap
+   - name: "Start services."
+     service: name="{{ item }}" state=started enabled=yes
+     with_items: services
+   - name: "OpenIPMap git repo clone"
+     git: repo=https://github.com/emileaben/openipmap.git
+          dest=/home/openipmap/openipmap/

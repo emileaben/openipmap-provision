@@ -1,0 +1,18 @@
+---
+rpm_repos:
+  - "http://yum.postgresql.org/9.2/redhat/rhel-6-x86_64/pgdg-centos92-9.2-6.noarch.rpm"
+system_packages:
+  - git
+  - python-setuptools
+  - python-devel
+  - ntp
+  - postgresql92-server
+  - postgis2_92
+  - httpd
+python_packages:
+  - pip
+  - virtualenv
+  - psycopg2
+services:
+  - postgresql-9.2
+  - httpd
