@@ -9,10 +9,32 @@ system_packages:
   - postgresql92-server
   - postgis2_92
   - httpd
+  - mod_wsgi
+  - python-psycopg2
+  - ipython
 python_packages:
   - pip
   - virtualenv
-  - psycopg2
+pip_packages:
+  - django
+  - South
+  - beautifulsoup4
+  - publicsuffix
+  - djangorestframework
+  - dnspython
+  - netaddr
+  - django-netfields
+  - ipaddress
+pip_packages_extra:
+  'geopy':
+    version: "0.99"
 services:
   - postgresql-9.2
   - httpd
+dbname: vagrant
+dbuser: vagrant
+## can't say 'django' anywhere in the project name it seems
+django_project: djangoproject 
+project_home: /home/vagrant
+project_dir: "{{project_home}}/{{ django_project }}"
+production_dumpdata: "https://marmot.ripe.net/static/"

@@ -11,21 +11,84 @@
      with_items: rpm_repos
      args:
        creates: "/etc/yum.repos.d/pgdg-92-centos.repo"
-   # ^^--- this should probably use something like: https://www.zigg.com/2013/yum-repository-bootstrapping-ansible.html
    - name: "Install required system packages."
      yum: name="{{ item }}" state=latest
      with_items: system_packages
    - name: "Install required Python packages."
      easy_install: name="{{ item }}"
      with_items: python_packages
-   - name: "Initiate PG database"
+   - name: "PIP install packages."
+     pip: name="{{ item }}"
+     with_items: pip_packages
+   - name: "PIP install specific versions of packages."
+     pip: name="{{ item.key }}" version="{{ item.value.version }}"
+     with_dict: pip_packages_extra
+   - name: "Initiate Postgres DB"
      command: service postgresql-9.2 initdb
-              creates=/var/lib/pgsql/data/postgresql.conf
-   - name: "Create PG openipmap db"
-     postgresql_db: name=openipmap
+              creates=/var/lib/pgsql/9.2/data/postgresql.conf
+   - name: "Make Postgres accessible"
+     lineinfile: dest=/var/lib/pgsql/9.2/data/pg_hba.conf
+                 regexp='host\s+all\s+all\s+127.0.0.1/32\s+trust'
+                 line='host all all 127.0.0.1/32 trust'
+                 insertbefore=BOF
+     notify: restart postgresql
    - name: "Start services."
      service: name="{{ item }}" state=started enabled=yes
      with_items: services
-   - name: "OpenIPMap git repo clone"
-     git: repo=https://github.com/emileaben/openipmap.git
-          dest=/home/openipmap/openipmap/
+   - name: "Create Postgres DB User"
+     postgresql_user: name={{dbuser}}
+     sudo_user: postgres
+   - name: "Create Postgres DB"
+     postgresql_db: name={{dbname}} owner={{dbuser}}
+     sudo_user: postgres
+   - name: "Create Postgis extension"
+     command: psql -d {{dbname}} -c "CREATE EXTENSION postgis;"
+     sudo_user: postgres
+     ignore_errors: true
+   - name: "Create project dir"
+     file: path={{ project_dir }} state=directory owner=vagrant group=vagrant
+   - name: "Start django project" 
+     command: django-admin.py startproject {{ django_project }}  {{ project_home }}
+     sudo_user: vagrant
+     args:
+       creates: "{{ project_home }}/manage.py"
+   - name: "Template django project settings"
+     template: src=openipmap/provisioning/django/settings.template.py dest="{{ project_dir }}/settings.py"
+   - name: "Django URLs"
+     copy: src=openipmap/provisioning/django/urls.py dest={{ project_home }}/urls.py
+     sudo_user: vagrant
+   - name: "Django package templates"
+     file: path={{project_dir}}/templates/registration state=directory
+     sudo_user: vagrant
+   - name: "Login page" 
+     copy: src=openipmap/provisioning/django/login.html dest={{ project_dir }}/templates/registration/login.html
+     sudo_user: vagrant
+   - name: "Django syncdb"
+     shell: "{{ project_home }}/manage.py syncdb --noinput"
+     sudo_user: vagrant
+   - name: "Django imports"
+     shell: "{{ project_home }}/manage.py {{ item }}"
+     args:
+       chdir: "{{ project_home }}"
+     sudo_user: vagrant
+     with_items:
+       - importcities
+       - importalternatecities
+       - importclli
+       - importprobes
+       - createmockusers
+   - name: "fetch openipmap database in Django importable format"
+     command: curl -k -o {{ project_dir }}/{{ item }} {{ production_dumpdata }}/{{ item }}
+     sudo_user: vagrant
+     with_items:
+       - openipmap.HostnameRule.dumpdata.json
+       - openipmap.IPRule.dumpdata.json
+   - name: "import openipmap databases into Django"
+     shell: "{{ project_home }}/manage.py loaddata {{ project_dir }}/{{ item }}"
+     sudo_user: vagrant
+     with_items:
+       - openipmap.HostnameRule.dumpdata.json
+       - openipmap.IPRule.dumpdata.json
+  handlers:
+   - name: restart postgresql
+     service: name=postgresql state=restarted
