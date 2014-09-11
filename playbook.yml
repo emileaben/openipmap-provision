@@ -50,15 +50,15 @@
      args:
        creates: "{{ project_home }}/manage.py"
    - name: "Template django project settings"
-     template: src=django/settings.template.py dest="{{ project_dir }}/settings.py"
+     template: src=files/settings.template.py dest="{{ project_dir }}/settings.py"
    - name: "Django URLs"
-     copy: src=django/urls.py dest={{ project_home }}/urls.py
+     copy: src=files/urls.py dest={{ project_home }}/urls.py
      sudo_user: vagrant
    - name: "Django package templates"
      file: path={{project_dir}}/templates/registration state=directory
      sudo_user: vagrant
    - name: "Login page" 
-     copy: src=openipmap/provisioning/django/login.html dest={{ project_dir }}/templates/registration/login.html
+     copy: src=files/login.html dest={{ project_dir }}/templates/registration/login.html
      sudo_user: vagrant
    - name: "Django syncdb"
      shell: "{{ project_home }}/manage.py syncdb --noinput"
