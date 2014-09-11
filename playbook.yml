@@ -20,9 +20,6 @@
    - name: "PIP install packages."
      pip: name="{{ item }}"
      with_items: pip_packages
-   - name: "PIP install specific versions of packages."
-     pip: name="{{ item.key }}" version="{{ item.value.version }}"
-     with_dict: pip_packages_extra
    - name: "Initiate Postgres DB"
      command: service postgresql-9.2 initdb
               creates=/var/lib/pgsql/9.2/data/postgresql.conf
@@ -53,9 +50,9 @@
      args:
        creates: "{{ project_home }}/manage.py"
    - name: "Template django project settings"
-     template: src=openipmap/provisioning/django/settings.template.py dest="{{ project_dir }}/settings.py"
+     template: src=django/settings.template.py dest="{{ project_dir }}/settings.py"
    - name: "Django URLs"
-     copy: src=openipmap/provisioning/django/urls.py dest={{ project_home }}/urls.py
+     copy: src=django/urls.py dest={{ project_home }}/urls.py
      sudo_user: vagrant
    - name: "Django package templates"
      file: path={{project_dir}}/templates/registration state=directory

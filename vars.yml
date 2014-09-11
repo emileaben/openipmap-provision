@@ -16,7 +16,7 @@ python_packages:
   - pip
   - virtualenv
 pip_packages:
-  - django
+  - django==1.6
   - South
   - beautifulsoup4
   - publicsuffix
@@ -25,9 +25,7 @@ pip_packages:
   - netaddr
   - django-netfields
   - ipaddress
-pip_packages_extra:
-  'geopy':
-    version: "0.99"
+  - geopy==0.99
 services:
   - postgresql-9.2
   - httpd
