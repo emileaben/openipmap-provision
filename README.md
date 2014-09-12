@@ -37,4 +37,4 @@ To run openipmap in the virtual box:
    
 Because TCP/8000 is mapped to TCP/8000 on your local machine, openipmap is now available at: http://localhost:8000/openipmap
 
-The provisioning will create a virtual environment that contains 1000 mock users called 'user<id>' with password 'vagrant', with <id>: 1-999 , use this to log in. The provisioning will also download the most recent openipmap hostname and ip geoloc entries.
+The provisioning will create a virtual environment that contains 1000 mock users called 'user<id>' with password 'vagrant', with \<id\>: 1-999 , use this to log in. The provisioning will also download the most recent openipmap hostname and ip geoloc entries.
