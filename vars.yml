@@ -1,0 +1,38 @@
+---
+rpm_repos:
+  - "http://yum.postgresql.org/9.2/redhat/rhel-6-x86_64/pgdg-centos92-9.2-6.noarch.rpm"
+system_packages:
+  - git
+  - python-setuptools
+  - python-devel
+  - ntp
+  - postgresql92-server
+  - postgis2_92
+  - httpd
+  - mod_wsgi
+  - python-psycopg2
+  - ipython
+python_packages:
+  - pip
+  - virtualenv
+pip_packages:
+  - django==1.6
+  - South
+  - beautifulsoup4
+  - publicsuffix
+  - djangorestframework
+  - dnspython
+  - netaddr
+  - django-netfields
+  - ipaddress
+  - geopy==0.99
+services:
+  - postgresql-9.2
+  - httpd
+dbname: vagrant
+dbuser: vagrant
+## can't say 'django' anywhere in the project name it seems
+django_project: djangoproject 
+project_home: /home/vagrant
+project_dir: "{{project_home}}/{{ django_project }}"
+production_dumpdata: "https://marmot.ripe.net/static/"
