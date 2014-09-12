@@ -1,5 +1,6 @@
 ---
 rpm_repos:
+  - "http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm"
   - "http://yum.postgresql.org/9.2/redhat/rhel-6-x86_64/pgdg-centos92-9.2-6.noarch.rpm"
 system_packages:
   - git
@@ -12,19 +13,20 @@ system_packages:
   - mod_wsgi
   - python-psycopg2
   - ipython
+  - libselinux-python
 python_packages:
   - pip
   - virtualenv
 pip_packages:
-  - django==1.6
-  - South
-  - beautifulsoup4
-  - publicsuffix
-  - djangorestframework
-  - dnspython
-  - netaddr
-  - django-netfields
-  - ipaddress
+  - django==1.6.6
+  - South==1.0
+  - beautifulsoup4==4.3.2
+  - publicsuffix==1.0.5
+  - djangorestframework==2.4.1
+  - dnspython==1.11.1
+  - netaddr==0.7.12
+  - django-netfields==0.2.2
+  - ipaddress==1.0.6
   - geopy==0.99
 services:
   - postgresql-9.2
