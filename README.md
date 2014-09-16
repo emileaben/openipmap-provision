@@ -33,8 +33,10 @@ The django-openipmap repository is available both on your local box (django-open
 To run openipmap in the virtual box:
 
     vagrant ssh
-    manage runserver 0.0.0.0:8000
+    ./manage.py runserver 0.0.0.0:8000
    
 Because TCP/8000 is mapped to TCP/8000 on your local machine, openipmap is now available at: http://localhost:8000/openipmap
 
 The provisioning will create a virtual environment that contains 1000 mock users called 'user<id>' with password 'vagrant', with \<id\>: 1-999 , use this to log in. The provisioning will also download the most recent openipmap hostname and ip geoloc entries.
+
+Be sure the guest OS does not firewall incoming TCP/8000 (iptables -L).
