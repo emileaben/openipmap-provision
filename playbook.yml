@@ -88,4 +88,4 @@
        - openipmap.IPRule.dumpdata.json
   handlers:
    - name: restart postgresql
-     service: name=postgresql state=restarted
+     service: name=postgresql-9.2 state=restarted
