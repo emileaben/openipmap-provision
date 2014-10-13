@@ -1,7 +1,7 @@
-django-openipmap-provision
+openipmap-provision
 ==========================
 
-Provisioning of a development version of django-openipmap.
+Provisioning of a development version of openipmap.
 
 Prerequisites
 =============
@@ -13,8 +13,8 @@ Setup
 =====
 
     # clone this repository
-    git clone https://github.com/emileaben/django-openipmap-provision.git
-    cd django-openipmap-provision
+    git clone https://github.com/emileaben/openipmap-provision.git
+    cd openipmap-provision
     # clone the django-openipmap repository
     git clone https://github.com/emileaben/django-openipmap
     # put a local centos6 vagrant image to local directory [*]
@@ -28,7 +28,7 @@ Setup
 Usage
 =====
 
-The django-openipmap repository is available both on your local box (django-openipmap) as well as in /home/vagrant/openipmap in the virtual machine.
+The django-openipmap repository is available both on your local box (directory django-openipmap) as well as in /home/vagrant/openipmap in the virtual machine.
 
 To run openipmap in the virtual box:
 
