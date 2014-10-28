@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'south',
     'rest_framework',
+    'simple_history',
     'openipmap'
 )
 
