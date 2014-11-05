@@ -28,6 +28,7 @@ pip_packages:
   - django-netfields==0.2.2
   - ipaddress==1.0.6
   - geopy==0.99
+  - django-simple-history
 services:
   - postgresql-9.2
   - httpd
