@@ -29,6 +29,7 @@ pip_packages:
   - ipaddress==1.0.6
   - geopy==0.99
   - django-simple-history
+  - pytz
 services:
   - postgresql-9.2
   - httpd
